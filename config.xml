@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<debug saveToDisk="0">INFO</debug>
+	
+	<linkbird>
+		<incomingPort>1302</incomingPort>
+		<outgoingPort>1301</outgoingPort>
+		<outgoingAddress>localhost</outgoingAddress>
+	</linkbird>
+	
+	<gps enabled="true">
+		<port>1111</port>
+	</gps>
+
+</config>
