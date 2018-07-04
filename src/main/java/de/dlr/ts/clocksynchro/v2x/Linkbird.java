@@ -16,20 +16,25 @@ import de.dlr.ts.commons.c2x.interfaces.ccu.DisseminationType;
  */
 public class Linkbird implements CCU.Listener
 {
- private CCU ccu;
+    private static final Linkbird INSTANCE = new Linkbird();
     
-    public Linkbird() 
+    private CCU ccu;
+    
+    private Linkbird() 
     {
     }
 
-    public void recieve()
+    public void start()
     {
         ccu = LinkbirdFactory.createCCU();
         ccu.addListener(this);
-        ccu.setCCUAddress("127.0.0.1");
+        ccu.setCCUAddress(Config.getInstance().getLinkbirdOutgoingAddress());
+        ccu.setDataInputPort(Config.getInstance().getLinkbirdIncomingPort());
+        ccu.setDataOutputPort(Config.getInstance().getLinkbirdOutgoingPort());
         ccu.startReceiver();
     }
 
+    @Override
     public void newIncomingMessage(CCUMessage im) {
         
         if(im.getDestinationPort() != 2100)
@@ -41,13 +46,19 @@ public class Linkbird implements CCU.Listener
         System.out.println(string);
     }
     
-    public void send(byte[] message)
+    public void send(byte[] payload)
     {
         CCUMessage mess = ccu.createCCUMessage();
         mess.setDisseminationType(DisseminationType.TOPO_SCOPED_BROADCAST_SINGLEHOP);
-        mess.setDestinationPort(2100);
-        mess.setPayload(message);
+        mess.setDestinationPort(3333);
+        mess.setPayload(payload);
         
         ccu.sendMessage(mess);
     }   
+
+    public static Linkbird getInstance() {
+        return INSTANCE;
+    }
+    
+    
 }

@@ -20,5 +20,6 @@ public class Main
     public void start() {        
         
         Config.getInstance().load();
+        Linkbird.getInstance().start();
     }
 }

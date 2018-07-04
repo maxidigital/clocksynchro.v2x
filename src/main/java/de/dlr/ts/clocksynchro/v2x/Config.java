@@ -54,6 +54,11 @@ public class Config
             Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public String getLinkbirdOutgoingAddress() {
+        return linkbirdOutgoingAddress;
+    }
+    
     
     
     public int getLinkbirdOutgoingPort() {
