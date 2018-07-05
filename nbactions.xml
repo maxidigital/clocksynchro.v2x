@@ -68,4 +68,27 @@
                 <goal>--offline</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-install offline</actionName>
+            <displayName>install offline</displayName>
+            <goals>
+                <goal>install</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-install -u</actionName>
+            <displayName>install -u</displayName>
+            <goals>
+                <goal>install</goal>
+                <goal>-u</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-install no snapshots update</actionName>
+            <displayName>install no snapshots update</displayName>
+            <goals>
+                <goal>install</goal>
+                <goal>-nsu</goal>
+            </goals>
+        </action>
     </actions>

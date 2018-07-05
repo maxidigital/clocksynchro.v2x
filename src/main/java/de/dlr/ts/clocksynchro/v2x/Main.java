@@ -6,6 +6,7 @@
 package de.dlr.ts.clocksynchro.v2x;
 
 import de.dlr.ts.commons.logger.DLRLogger;
+import java.util.Arrays;
 
 /**
  *
@@ -21,5 +22,8 @@ public class Main
         
         Config.getInstance().load();
         Linkbird.getInstance().start();
+        byte[] message = new Time().getMessage();
+        Linkbird.getInstance().send(message);
+        new TimeUpdate().start();
     }
 }

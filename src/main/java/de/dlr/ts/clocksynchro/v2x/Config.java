@@ -44,6 +44,7 @@ public class Config
             
             linkbirdIncomingPort = x.getNode("linkbird.incomingPort").getValue(0);
             
+            
         } catch (SAXException ex) {
             Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
