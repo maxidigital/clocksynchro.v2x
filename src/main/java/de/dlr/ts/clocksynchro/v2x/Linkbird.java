@@ -31,7 +31,7 @@ public class Linkbird implements CCU.Listener
         ccu.setCCUAddress(Config.getInstance().getLinkbirdOutgoingAddress());
         ccu.setDataInputPort(Config.getInstance().getLinkbirdIncomingPort());
         ccu.setDataOutputPort(Config.getInstance().getLinkbirdOutgoingPort());
-        ccu.startReceiver();
+        //ccu.startReceiver();
     }
 
     @Override

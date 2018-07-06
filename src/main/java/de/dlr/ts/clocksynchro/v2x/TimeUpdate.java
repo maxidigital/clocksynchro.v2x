@@ -5,31 +5,65 @@
  */
 package de.dlr.ts.clocksynchro.v2x;
 
+import de.dlr.ts.commons.logger.DLRLogger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Praktikant-Q2-2015
  */
 public class TimeUpdate {
-     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
      
      
      public void start(){
+         TimeUpdate obj = new TimeUpdate(); 
+         
+         String value = TimeTools.getCurrentTimeInString();
+         Date date = null;
          try {
-            String value = Time.getInstance().getTime();
-            Date date = dateFormat.parse(value);
-            value = dateFormat.format(date);
-            final Process dateProcess = Runtime.getRuntime().exec("sudo date --set " +value);
-            dateProcess.waitFor();
-            dateProcess.exitValue();
-            final Process timeProcess = Runtime.getRuntime().exec("TS_labor_48");
+             date = dateFormat.parse(value);
+         } catch (ParseException ex) {
+             Logger.getLogger(TimeUpdate.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        value = "\"" + dateFormat.format(date) + "\"";
+        String[] command = new String[]{"date","--set",value};
+        execCommand(command);
+
+         //System.out.println(output);
+     }
+     
+     public String execCommand(String[] command){
+         StringBuffer output = new StringBuffer();
+         Process p;
+         
+         //2011-12-07 01:20:15.962"
+         try {
+            p = Runtime.getRuntime().exec(command);
+
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(p.getInputStream()));
+            
+            String line = "";
+            while ((line = reader.readLine())!= null) {
+                output.append(line + "\n");
+            }
+           /* final Process timeProcess = Runtime.getRuntime().exec("TS_labor_48");
             timeProcess.waitFor();
-            timeProcess.exitValue();
+            timeProcess.exitValue();*/
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
+         return output.toString();
     }
 }

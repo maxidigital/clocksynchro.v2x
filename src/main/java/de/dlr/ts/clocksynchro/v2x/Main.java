@@ -20,10 +20,14 @@ public class Main
     
     public void start() {        
         
+        DLRLogger.config(this, "Starting Clock Synchro");
+        
         Config.getInstance().load();
         Linkbird.getInstance().start();
-        byte[] message = new Time().getMessage();
-        Linkbird.getInstance().send(message);
+        
+        //byte[] message = TimeTools.getMessage();
+        //Linkbird.getInstance().send(message);
+        
         new TimeUpdate().start();
     }
 }
