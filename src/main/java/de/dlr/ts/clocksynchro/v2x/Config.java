@@ -26,7 +26,14 @@ public class Config
     private int linkbirdIncomingPort = 1302;
     private int linkbirdOutgoingPort = 1301;
     private String linkbirdOutgoingAddress = "localhost";
-
+    
+    public enum StationType{GENERATOR, TERMINAL}
+    private StationType stationType = StationType.GENERATOR;
+    
+    private int gpsInputPort = 1234;
+    
+    private int timeMessageBTPPort = 3333;
+    private int heartbeatBTPPort = 3334;
     
     /**
      * 
@@ -44,6 +51,8 @@ public class Config
             
             linkbirdIncomingPort = x.getNode("linkbird.incomingPort").getValue(0);
             
+            String st = x.getNode("general.stationType").getValue();
+            stationType = StationType.valueOf(st.toUpperCase());
             
         } catch (SAXException ex) {
             Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
@@ -56,11 +65,25 @@ public class Config
         }
     }
 
+    public int getGpsInputPort() {
+        return gpsInputPort;
+    }
+
     public String getLinkbirdOutgoingAddress() {
         return linkbirdOutgoingAddress;
     }
-    
-    
+
+    public StationType getStationType() {
+        return stationType;
+    }
+
+    public int getHeartbeatBTPPort() {
+        return heartbeatBTPPort;
+    }
+
+    public int getTimeMessageBTPPort() {
+        return timeMessageBTPPort;
+    }
     
     public int getLinkbirdOutgoingPort() {
         return linkbirdOutgoingPort;

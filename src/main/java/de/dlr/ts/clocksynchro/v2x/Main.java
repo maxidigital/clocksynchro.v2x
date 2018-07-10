@@ -1,11 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.dlr.ts.clocksynchro.v2x;
 
+import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
+import de.dlr.ts.clocksynchro.v2x.timebroadcaster.LinkbirdBroadcaster;
+import de.dlr.ts.clocksynchro.v2x.timeAPI.TimeAPISender;
+import de.dlr.ts.clocksynchro.v2x.timebroadcaster.TimeBroadcaster;
 import de.dlr.ts.commons.logger.DLRLogger;
+import de.dlr.ts.commons.network.udp.UDPClient;
+import java.io.IOException;
+import java.net.SocketException;
 import java.util.Arrays;
 
 /**
@@ -14,20 +16,21 @@ import java.util.Arrays;
  */
 public class Main
 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SocketException, IOException {
         new Main().start();
     }
     
-    public void start() {        
+    public void start() throws SocketException, IOException {        
         
         DLRLogger.config(this, "Starting Clock Synchro");
         
         Config.getInstance().load();
-        Linkbird.getInstance().start();
+        TimeAPISender.getInstance().start();
         
-        //byte[] message = TimeTools.getMessage();
-        //Linkbird.getInstance().send(message);
+        ClockSource.getInstance().start();
         
-        new TimeUpdate().start();
+        if(Config.getInstance().getStationType() == Config.StationType.GENERATOR)
+            TimeBroadcaster.getInstance().start();
+
     }
 }

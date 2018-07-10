@@ -4,10 +4,19 @@
 
 	<debug saveToDisk="0">INFO</debug>
 	
+	<general>
+		<stationType>generator</stationType>
+	</general>
+	
 	<linkbird>
 		<incomingPort>1302</incomingPort>
 		<outgoingPort>1301</outgoingPort>
 		<outgoingAddress>localhost</outgoingAddress>
+                
+                <btpPorts>
+                    <timeMessage>3333</timeMessage>
+                    <heartbeatMessage>3334</heartbeatMessage>
+                </btpPorts>
 	</linkbird>
 	
 	<gps enabled="true">
