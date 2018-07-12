@@ -36,11 +36,14 @@ public class TimeUpdate {
          } catch (ParseException ex) {
              Logger.getLogger(TimeUpdate.class.getName()).log(Level.SEVERE, null, ex);
          }
-        value = "\"" + dateFormat.format(date) + "\"";
-        String[] command = new String[]{"date","--set",value};
-        execCommand(command);
-
-         //System.out.println(output);
+        value = "\"" + dateFormat.format(date) + "\"";        
+        //value = dateFormat.format(date);
+        
+        String tmp = "date --set " + value;        
+        System.out.println("Command " + tmp);
+        String[] command = tmp.split(" ");                
+        execCommand(command);         
+        execCommand("date".split(" "));
      }
      
      public String execCommand(String[] command){
@@ -58,9 +61,7 @@ public class TimeUpdate {
             while ((line = reader.readLine())!= null) {
                 output.append(line + "\n");
             }
-           /* final Process timeProcess = Runtime.getRuntime().exec("TS_labor_48");
-            timeProcess.waitFor();
-            timeProcess.exitValue();*/
+            
         } catch (Exception exception) {
             throw new RuntimeException(exception);
         }
