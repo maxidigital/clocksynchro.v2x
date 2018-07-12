@@ -14,51 +14,34 @@ import de.dlr.ts.commons.c2x.interfaces.ccu.DisseminationType;
  *
  * @author Praktikant-Q2-2015
  */
-public class Linkbird implements CCU.Listener
-{
-    private static final Linkbird INSTANCE = new Linkbird();
-    
+public class MainLinkbird {
+    private static final MainLinkbird instance = new MainLinkbird();
     private CCU ccu;
     
-    private Linkbird() 
-    {
-    }
-
     public void start()
     {
         ccu = LinkbirdFactory.createCCU();
-        ccu.addListener(this);
         ccu.setCCUAddress(Config.getInstance().getLinkbirdOutgoingAddress());
         ccu.setDataInputPort(Config.getInstance().getLinkbirdIncomingPort());
         ccu.setDataOutputPort(Config.getInstance().getLinkbirdOutgoingPort());
-        //ccu.startReceiver();
-    }
-
-    @Override
-    public void newIncomingMessage(CCUMessage im) {
-        
-        if(im.getDestinationPort() != 2100)
-            return;
-        
-        byte[] payload = im.getPayload();
-        
-        String string = new String(payload);
-        System.out.println(string);
+        ccu.startReceiver();
     }
     
-    public void send(byte[] payload)
+    public void addListener(CCU.Listener listener) {
+        ccu.addListener(listener);
+    }
+    
+    public static MainLinkbird getInstance() {
+        return instance;
+    }
+    
+    public void send(byte[] payload, int btpPort)
     {
         CCUMessage mess = ccu.createCCUMessage();
         mess.setDisseminationType(DisseminationType.TOPO_SCOPED_BROADCAST_SINGLEHOP);
-        mess.setDestinationPort(3333);
+        mess.setDestinationPort(btpPort);
         mess.setPayload(payload);
         
         ccu.sendMessage(mess);
-    }   
-
-    public static Linkbird getInstance() {
-        return INSTANCE;
     }
-    
-    
 }

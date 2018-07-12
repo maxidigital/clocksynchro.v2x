@@ -4,6 +4,11 @@
 
 	<debug saveToDisk="0">INFO</debug>
 	
+	<general>
+            <stationId>47</stationId>
+            <stationType>generator</stationType>
+	</general>
+	
 	<linkbird>
 		<incomingPort>1302</incomingPort>
 		<outgoingPort>1301</outgoingPort>
