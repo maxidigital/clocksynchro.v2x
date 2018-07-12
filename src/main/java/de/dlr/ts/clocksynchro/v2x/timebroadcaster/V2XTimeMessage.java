@@ -9,24 +9,39 @@ import de.dlr.ts.clocksynchro.v2x.UDPMessageInterface;
  * @see UDPMessageInterface
  */
 public class V2XTimeMessage implements UDPMessageInterface
-{    
-    private int hops;
+{   
+    private static int messageIdCounter = 0;
     private int messageId;
+    private byte hops;
     private long currentTime;
     
-    public static final int GDP_PORT = 2100;
-
    /**
     * gets message ID  
-    * @reutrn messageID
+    * @return messageID
     */
     public int getMessageId() {
         return messageId;
     }
+
+    public static int getMessageIdCounter() {
+        return messageIdCounter++;
+    }
+
+    public void setMessageId(int messageId) {
+        this.messageId = messageId;
+    }
+    
+    public void setCurrentTime(long currentTime) {
+        this.currentTime = currentTime;
+    }
+
+    public void setHops(byte hops) {
+        this.hops = hops;
+    }
     
    /**
-    * gets nukber of hops  
-    * @reutrn hops
+    * Gets number of hops  
+    * @return hops
     */
     public int getHops() {
         return hops;
@@ -34,7 +49,7 @@ public class V2XTimeMessage implements UDPMessageInterface
     
    /**
     * gets current time  
-    * @reutrn current time 
+    * @return current time 
     */
     public long getCurrentTime() {
         return currentTime;
@@ -51,13 +66,13 @@ public class V2XTimeMessage implements UDPMessageInterface
     
    /**
     *  parses byte array message 
-    *  @param byte[] Message in bytes
+    *  @param data Message in bytes
     */
     @Override
     public void parse(byte[] data)
     {
         ByteBuffer bb = ByteBuffer.wrap(data);
-        hops = bb.getInt();
+        hops = bb.get();
         messageId = bb.getInt();
         currentTime = bb.getLong();
     }
@@ -70,8 +85,7 @@ public class V2XTimeMessage implements UDPMessageInterface
     public byte[] getBytes()
     {
         ByteBuffer bb = ByteBuffer.allocate(128);
-        
-        bb.putInt(hops);
+        bb.put(hops);
         bb.putInt(messageId);
         bb.putLong(currentTime);
         

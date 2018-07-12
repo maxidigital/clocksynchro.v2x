@@ -1,14 +1,12 @@
 package de.dlr.ts.clocksynchro.v2x;
 
 import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
-import de.dlr.ts.clocksynchro.v2x.timebroadcaster.LinkbirdBroadcaster;
+import de.dlr.ts.clocksynchro.v2x.heartbeat.Heartbeat;
 import de.dlr.ts.clocksynchro.v2x.timeAPI.TimeAPISender;
 import de.dlr.ts.clocksynchro.v2x.timebroadcaster.TimeBroadcaster;
 import de.dlr.ts.commons.logger.DLRLogger;
-import de.dlr.ts.commons.network.udp.UDPClient;
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.Arrays;
 
 /**
  *
@@ -16,6 +14,7 @@ import java.util.Arrays;
  */
 public class Main
 {
+            
     public static void main(String[] args) throws SocketException, IOException {
         new Main().start();
     }
@@ -25,9 +24,9 @@ public class Main
         DLRLogger.config(this, "Starting Clock Synchro");
         
         Config.getInstance().load();
-        TimeAPISender.getInstance().start();
-        
         ClockSource.getInstance().start();
+        Heartbeat.getInstance().start();
+        TimeAPISender.getInstance().start();
         
         if(Config.getInstance().getStationType() == Config.StationType.GENERATOR)
             TimeBroadcaster.getInstance().start();

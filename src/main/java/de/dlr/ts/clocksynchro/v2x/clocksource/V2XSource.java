@@ -17,7 +17,7 @@ class V2XSource implements CCU.Listener, ClockSourceInterface
 {
     private CCU ccu;
     private int lastMessageReceivedId = -1;
-    private long deltaTime = 0L;
+    private int deltaTime = 0;
     
    /**
     * Starts receiving time Messages from Linkbird source
@@ -40,7 +40,7 @@ class V2XSource implements CCU.Listener, ClockSourceInterface
      */
     @Override
     public void newIncomingMessage(CCUMessage im) {
-        if(im.getDestinationPort() != V2XTimeMessage.GDP_PORT)
+        if(im.getDestinationPort() != Config.getInstance().getTimeMessageBTPPort())
             return;
         
         byte[] payload = im.getPayload();
@@ -72,7 +72,7 @@ class V2XSource implements CCU.Listener, ClockSourceInterface
     {
         CCUMessage mess = ccu.createCCUMessage();
         mess.setDisseminationType(DisseminationType.TOPO_SCOPED_BROADCAST_SINGLEHOP);
-        mess.setDestinationPort(V2XTimeMessage.GDP_PORT);
+        mess.setDestinationPort(Config.getInstance().getTimeMessageBTPPort());
         mess.setPayload(payload);
         
         ccu.sendMessage(mess);
@@ -83,7 +83,7 @@ class V2XSource implements CCU.Listener, ClockSourceInterface
     * @return DeltaTime
     */
     @Override
-    public long getDeltaTime() {
+    public int getDeltaTime() {
         return deltaTime;
     }
 
@@ -92,7 +92,7 @@ class V2XSource implements CCU.Listener, ClockSourceInterface
     * @param V2XTimeMessage time message from Linkbird source
     */
     private void processMessage(V2XTimeMessage mess) {
-        deltaTime = System.currentTimeMillis() - mess.getCurrentTime();
+        deltaTime = (int) (System.currentTimeMillis() - mess.getCurrentTime());
         
         DLRLogger.info(this, "Saving delta time: " + deltaTime);
     }

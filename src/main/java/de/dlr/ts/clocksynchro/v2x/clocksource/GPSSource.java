@@ -3,7 +3,6 @@ package de.dlr.ts.clocksynchro.v2x.clocksource;
 import de.dlr.ts.clocksynchro.v2x.Config;
 import de.dlr.ts.commons.network.udp.UDPServer;
 import java.net.DatagramPacket;
-import de.dlr.ts.clocksynchro.v2x.timeAPI.TimeAPIMessage;
 import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,8 +14,10 @@ import java.util.logging.Logger;
  */
 class GPSSource implements UDPServer.Listener, ClockSourceInterface
 {
-    private long deltaTime = 0;
+    private int deltaTime = 0;
     private UDPServer udpServer;
+    private boolean enabled = false;
+    
     
     /**
      * Retrieves data from recieved time message from GPS source 
@@ -29,6 +30,14 @@ class GPSSource implements UDPServer.Listener, ClockSourceInterface
         //TimeAPIMessage mess = new TimeAPIMessage();
         //mess.parse(payload);
         
+        //TODO set delta time
+        deltaTime = 13000;
+        
+        enabled = true;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
     
    /**
@@ -50,7 +59,7 @@ class GPSSource implements UDPServer.Listener, ClockSourceInterface
     * @return DeltaTime
     */
     @Override
-    public long getDeltaTime() {
+    public int getDeltaTime() {
         return deltaTime;
     }
     

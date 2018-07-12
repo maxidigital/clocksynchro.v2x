@@ -10,7 +10,7 @@ interface ClockSourceInterface {
     *  gets the time difference
     * 
     */
-    long getDeltaTime();
+    int getDeltaTime();
     
    /**
     *  Starts listening for time messages

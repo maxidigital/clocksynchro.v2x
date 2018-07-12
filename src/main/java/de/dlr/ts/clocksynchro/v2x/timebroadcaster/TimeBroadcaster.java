@@ -1,6 +1,9 @@
 
 package de.dlr.ts.clocksynchro.v2x.timebroadcaster;
 
+import de.dlr.ts.clocksynchro.v2x.Config;
+import de.dlr.ts.clocksynchro.v2x.Module;
+import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,10 +11,10 @@ import java.util.logging.Logger;
  * Broadcasts time messages 
  * 
  */
-public class TimeBroadcaster extends Thread
+public class TimeBroadcaster extends Thread implements Module
 {
     private static final TimeBroadcaster INSTANCE = new TimeBroadcaster();
-    private LinkbirdBroadcaster linkbird; 
+    private final LinkbirdBroadcaster linkbird; 
     
 
     private TimeBroadcaster() {
@@ -28,12 +31,16 @@ public class TimeBroadcaster extends Thread
         while(true)
         {
             try {
-                Thread.sleep(1000L);
+                Thread.sleep(Config.getInstance().getTimeBroadcastingSendingInterval());
             } catch (InterruptedException ex) {
                 Logger.getLogger(TimeBroadcaster.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            
             V2XTimeMessage message = new V2XTimeMessage();
+            message.setMessageId(V2XTimeMessage.getMessageIdCounter());
+            message.setCurrentTime(ClockSource.getInstance().getCurrentTime());
+            message.setHops((byte) Config.getInstance().getStartingHopValue());
             linkbird.send(message.getBytes());
         }
     }

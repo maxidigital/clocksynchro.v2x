@@ -4,13 +4,13 @@ import de.dlr.ts.clocksynchro.v2x.UDPMessageInterface;
 
 /**
  *  Process GPS time messages
- *  @see UDPMessageInterface
+ *  @see UDPMessageInterface    
  */
 public class GPSMessage implements UDPMessageInterface
 {
    /**
     *  parses byte array message 
-    *  @param byte[] Message in bytes
+    *  @param bytes Message in bytes
     */
     @Override
     public void parse(byte[] bytes) {

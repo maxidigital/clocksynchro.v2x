@@ -1,12 +1,11 @@
 package de.dlr.ts.clocksynchro.v2x.timeAPI;
 
-import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
 import de.dlr.ts.commons.tools.BytesTools;
 import java.nio.ByteBuffer;
 import de.dlr.ts.clocksynchro.v2x.UDPMessageInterface;
 
 /**
- * Process meeages from UDP server (GPS Source9 
+ * Process meeages from UDP server (GPS Source)
  * @see UDPMessageInterface
  */
 public class TimeAPIMessage implements UDPMessageInterface
@@ -18,15 +17,19 @@ public class TimeAPIMessage implements UDPMessageInterface
     *  @return byte[] 
     */
     @Override
-    public byte[] getBytes()
-    {
-        currentTime = ClockSource.getInstance().getCurrentTime();
-        return BytesTools.getBytes(currentTime);
+    public byte[] getBytes() {
+        ByteBuffer bb = ByteBuffer.allocate(Long.BYTES);
+        bb.putLong(currentTime);
+        return bb.array();
     }
-    
+
+    public void setCurrentTime(long currentTime) {
+        this.currentTime = currentTime;
+    }
+
    /**
-    *  parses byte array message 
-    *  @param byte[] Message in bytes
+    *  parses byte array message
+    *  @param bytes
     */
     @Override
     public void parse(byte[] bytes)
@@ -39,8 +42,7 @@ public class TimeAPIMessage implements UDPMessageInterface
     *  gets the current time 
     *  @return curretnTime
     */
-    public long getCurrentTime()
-    {
+    public long getCurrentTime() {
         return currentTime;
     }
 }

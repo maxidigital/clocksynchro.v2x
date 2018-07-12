@@ -1,5 +1,8 @@
 package de.dlr.ts.clocksynchro.v2x.timeAPI;
 
+import de.dlr.ts.clocksynchro.v2x.Config;
+import de.dlr.ts.clocksynchro.v2x.Module;
+import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
 import de.dlr.ts.commons.logger.DLRLogger;
 import de.dlr.ts.commons.network.udp.UDPClient;
 import java.io.IOException;
@@ -12,14 +15,15 @@ import java.util.logging.Logger;
  * Sends time messages from GPS 
  * 
  */
-public class TimeAPISender extends Thread 
+public class TimeAPISender extends Thread implements Module
 {
     private static final TimeAPISender instance = new TimeAPISender();
     private UDPClient client;
 
     public TimeAPISender() {
         try {
-            client = new UDPClient("localhost", 1234);
+            client = new UDPClient(Config.getInstance().getTimeAPIOutputAddress(), 
+                    Config.getInstance().getTimeAPIOutputPort());
         } catch (SocketException | UnknownHostException ex) {
             Logger.getLogger(TimeAPISender.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -33,11 +37,13 @@ public class TimeAPISender extends Thread
     public void run() {
         while(true)
         {
-            DLRLogger.fine(this, "Sending Time messsage to localhost:1234");
+            DLRLogger.fine(this, "Sending Time messsage to " + 
+                    Config.getInstance().getTimeAPIOutputAddress() + ":" +
+                    Config.getInstance().getTimeAPIOutputPort());
             sendTimeMessage();
             
             try {
-                Thread.sleep(1000);
+                Thread.sleep(Config.getInstance().getTimeAPISendingInterval());
             } catch (InterruptedException ex) {
                 Logger.getLogger(TimeAPISender.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -50,7 +56,10 @@ public class TimeAPISender extends Thread
     private void sendTimeMessage()
     {
         try {
-            client.send(new TimeAPIMessage().getBytes());
+            TimeAPIMessage mess = new TimeAPIMessage();
+            mess.setCurrentTime(ClockSource.getInstance().getCurrentTime());
+            
+            client.send(mess.getBytes());
         } catch (IOException ex) {
             Logger.getLogger(TimeAPISender.class.getName()).log(Level.SEVERE, null, ex);
         }

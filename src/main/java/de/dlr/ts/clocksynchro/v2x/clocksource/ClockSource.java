@@ -1,19 +1,24 @@
 package de.dlr.ts.clocksynchro.v2x.clocksource;
 
 import de.dlr.ts.clocksynchro.v2x.Config;
+import de.dlr.ts.clocksynchro.v2x.Global;
+import de.dlr.ts.clocksynchro.v2x.Module;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Defines the source of time 
  * 
  */
-public class ClockSource
+public class ClockSource implements Module
 {
     private static final ClockSource INSTANCE = new ClockSource();
     private ClockSourceInterface csi;
     
-    private long deltaTime;
     
-    
+    /**
+     * 
+     */
     private ClockSource() {
     }
     
@@ -21,6 +26,7 @@ public class ClockSource
     * Differentiates between generator message and terminal message
     * 
     */
+    @Override
     public void start()
     {
         if(Config.getInstance().getStationType() == Config.StationType.GENERATOR)
@@ -35,19 +41,22 @@ public class ClockSource
         }
         
     }
-   /**
-    * gets the cuurent time (System time + time difference)
-    *
-    */    
-    public long getCurrentTime()
-    {
-        return System.currentTimeMillis() + csi.getDeltaTime();
-        
-        //return System.currentTimeMillis();
+    
+    public int getDeltaTime() {
+        return csi.getDeltaTime();
     }
+    
+    public long getCurrentTime() {
+        return csi.getDeltaTime() + System.currentTimeMillis();
+    }
+    
+    public String getCurrentTimeString() {
+        return Global.getInstance().getOnlyTime().format(new Date(getCurrentTime()));
+    }
+    
    /**
     * returns instance of Clocksource
-    * @reutrn INSTANCE
+    * @return 
     */   
     public static ClockSource getInstance() {
         return INSTANCE;
