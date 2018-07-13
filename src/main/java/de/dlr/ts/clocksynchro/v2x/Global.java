@@ -49,6 +49,55 @@ public class Global {
     
     public static String dateInWords(long time)
     {
-        return "";
+        StringBuilder sb = new StringBuilder();
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+        long weeksInMilli = daysInMilli * 7;
+        long monthsInMilli = weeksInMilli * 4;
+        long yearsInMilli = monthsInMilli * 12;
+        
+        if(time >= yearsInMilli){
+            long yearsAgo = time / yearsInMilli;
+            time = time % yearsInMilli;
+            sb.append(yearsAgo).append("y").append(",");
+        }
+        
+        if(time >= monthsInMilli){
+            long monthsAgo = time / monthsInMilli;
+            time = time % monthsInMilli;
+            sb.append(monthsAgo).append("m").append(",");
+        }        
+        
+        if(time >= weeksInMilli){
+            long weeksAgo = time / weeksInMilli;
+            time = time % weeksInMilli;
+            sb.append(weeksAgo).append("w").append(",");
+        }
+        
+        if(time >= daysInMilli){
+            long daysAgo = time / daysInMilli;
+            time = time % daysInMilli;
+            sb.append(daysAgo).append("d").append(",");
+        }
+        
+        if(time >= hoursInMilli){
+            long hoursAgo = time / hoursInMilli;
+            time = time % hoursInMilli;
+            sb.append(hoursAgo).append("h").append(",");
+        }
+        
+        if(time >= minutesInMilli){
+            long minutesAgo = time / minutesInMilli;
+            time = time % minutesInMilli;
+            sb.append(minutesAgo).append("m").append(",");
+        }
+        
+        if(time >= secondsInMilli){
+            long secondsAgo = time / secondsInMilli;
+            sb.append(secondsAgo).append("s ago");
+        }
+        return sb.toString();
     }
 }
