@@ -5,7 +5,9 @@
  */
 package de.dlr.ts.clocksynchro.v2x.heartbeat;
 
+import de.dlr.ts.clocksynchro.v2x.Config;
 import de.dlr.ts.clocksynchro.v2x.Global;
+import de.dlr.ts.commons.tools.StringTools;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,61 +30,71 @@ class RemoteStation
     //int messagesCount;
     
     
-    public static void main(String[] args)
-    {
-        String columnFormat = "| %-15s | %4d |%n";        
-        //String format = String.format(columnFormat, "cucho", 2);                
-        
-        String format = String.format(title, 
-                "     Arrival",
-                " StatId",
-                " LastId ",
-                "hops",
-                "  delta ",
-                "     StartUp     ");
-                        
-        System.out.println(format);
-                
-    }
-    
-    private final static String title = "| %-17s | %7s | %8s | %4s | %8s | %-17s |";
-    private final static String conte = "| %-17s | %7s | %8s | %4s | %8s | %-17s |";
-    
+    /**
+     * 
+     * @return 
+     */
     public static String printLineNames()
     {
-        String format = String.format(title, 
-                "     Arrival",
-                " StatId",
-                " LastId ",
-                "hops",
-                "  delta ",
-                "     StartUp     ");
-              
-        return format;
+        StringBuilder sb = new StringBuilder();
+        sb.append("| ");
+        sb.append(StringTools.align("last", sizes[0], "C"));
+        sb.append(" | ");
+        sb.append(StringTools.align("statId", sizes[1], "C"));
+        sb.append(" | ");
+        sb.append(StringTools.align("lastId", sizes[2], "C"));
+        sb.append(" | ");
+        sb.append(StringTools.align("hops", sizes[3], "C"));
+        sb.append(" | ");
+        sb.append(StringTools.align("delta", sizes[4], "C"));
+        sb.append(" | ");
+        sb.append(StringTools.align("startUp", sizes[5], "C"));
+        sb.append(" |");
+                      
+        return sb.toString();
     }
     
+    private static int[]    sizes = {17, 7, 8, 4, 8, 17};
+    private static String[] align = {"R", "R", "R", "R", "R", "RS"};
+    
+    public boolean getState()
+    {
+        if(System.currentTimeMillis() - messageArrivalTime > 120_000)
+            return false;
+        
+        return true;
+    }
+    
+    /**
+     * 
+     * @return 
+     */
     public String printLine()
     {
         StringBuilder sb = new StringBuilder();
         
-        if(messageArrivalTime == 0)
-            sb.append("| ").append(StringUtils.repeat(" ", 17));
+        sb.append("| ");
+        
+        if(this.stationId == Config.getInstance().getMyStationId())
+            sb.append(StringUtils.repeat(" ", sizes[0]));
         else
-            sb.append("| ").append(Global.getInstance().getDateTime().format(new Date(messageArrivalTime)));
+            sb.append(Global.getInstance().getDateTime().format(new Date(messageArrivalTime)));        
+                        
+        sb.append(" | ");
+        sb.append(StringTools.align(stationId, sizes[1], align[1]));
         
-        String staId = String.format("%1$7s", stationId);        
-        sb.append(" | ").append(staId);
+        sb.append(" | ");
+        sb.append(StringTools.align(lastMessageId, sizes[2], align[2]));
         
-        String lastId = String.format("%1$8s", lastMessageId);
-        sb.append(" | ").append(lastId);
+        sb.append(" | ");
+        sb.append(StringTools.align(hopsToReach, sizes[3], align[3]));
         
-        String hops = String.format("%1$4s", hopsToReach);
-        sb.append(" | ").append(hops);
-                
-        String delta = String.format("%1$8s", deltaTimeInMillis);
-        sb.append(" | ").append(delta);
+        sb.append(" | ");
+        sb.append(StringTools.align(deltaTimeInMillis, sizes[4], align[4]));
         
-        sb.append(" | ").append(Global.getInstance().getDateTime().format(new Date(systemStartTime)));
+        sb.append(" | ");
+        String star = Global.getInstance().getDateTime().format(new Date(systemStartTime));
+        sb.append(StringTools.align(star, sizes[5], align[5]));
         
         sb.append(" |");        
         

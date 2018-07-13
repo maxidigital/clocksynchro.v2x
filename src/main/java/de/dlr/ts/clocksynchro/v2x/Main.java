@@ -7,6 +7,7 @@ import de.dlr.ts.clocksynchro.v2x.timebroadcaster.TimeBroadcaster;
 import de.dlr.ts.commons.logger.DLRLogger;
 import java.io.IOException;
 import java.net.SocketException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -15,15 +16,15 @@ import java.net.SocketException;
 public class Main
 {
             
-    public static void main(String[] args) throws SocketException, IOException {
+    public static void main(String[] args) throws SocketException, IOException {        
         new Main().start();
     }
     
-    public void start() throws SocketException, IOException {        
-        
-        DLRLogger.config(this, "-----------------------------------------------");
-        DLRLogger.config(this, "-----      Starting Clock Synchro");
-        DLRLogger.config(this, "-----------------------------------------------");
+    public void start() throws SocketException, IOException
+    {        
+        DLRLogger.config(StringUtils.repeat("-", 50));
+        DLRLogger.config(StringUtils.center("    Starting Clock Synchro    ", 50, "-"));
+        DLRLogger.config(StringUtils.repeat("-", 50));
         
         Config.getInstance().load();
         MainLinkbird.getInstance().start();

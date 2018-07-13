@@ -142,7 +142,7 @@ class HeartbeatMessage implements UDPMessageInterface
     @Override
     public String toString() {
         
-        StringBuilder sb = new StringBuilder("HeatbeatMessage ");
+        StringBuilder sb = new StringBuilder("Heatbeat ");
         sb.append("stationId=").append(stationId).append(", ");
         sb.append("messageId=").append(messageId).append(", ");        
         sb.append("startingHop=").append(startingHopValue).append(", ");

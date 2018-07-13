@@ -9,6 +9,8 @@ import de.dlr.ts.clocksynchro.v2x.Config;
 import de.dlr.ts.clocksynchro.v2x.Global;
 import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
 import de.dlr.ts.commons.logger.DLRLogger;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +31,7 @@ public class Printer extends Thread
         while(true)
         {
             try {
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Printer.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -47,6 +49,7 @@ public class Printer extends Thread
         rs.stationId = Config.getInstance().getMyStationId();
         rs.systemStartTime = Global.getInstance().getSystemStartTime();
         rs.lastMessageId = HeartbeatMessage.getCurrentMessageId();
+        rs.messageArrivalTime = System.currentTimeMillis();
         
         return rs;
     }
@@ -58,9 +61,16 @@ public class Printer extends Thread
         DLRLogger.info(RemoteStation.printLineNames());
         
         DLRLogger.info(fillUpMyData().printLine());
+                        
+        ArrayList list = new ArrayList(rss.keySet());
+        Collections.sort(list);
         
-        for (Integer i : rss.keySet())           
-            DLRLogger.info(rss.get(i).printLine());            
+        for (Object o : list) {                                
+            DLRLogger.info(rss.get((int)o).printLine());
+        }
+        
+        //for (Integer i : rss.keySet())
+          //  DLRLogger.info(rss.get(i).printLine());
 
         DLRLogger.info(RemoteStation.separator());
     }

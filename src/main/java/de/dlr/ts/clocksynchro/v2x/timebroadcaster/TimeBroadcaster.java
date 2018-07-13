@@ -42,7 +42,7 @@ public class TimeBroadcaster extends Thread implements Module
             message.setCurrentTime(ClockSource.getInstance().getCurrentTime());
             message.setHops((byte) Config.getInstance().getStartingHopValue());
             
-            DLRLogger.info(this, "Sending V2X time message: " + message);
+            DLRLogger.fine(this, "Sending V2X time message: " + message);
             
             linkbird.send(message.getBytes());
         }

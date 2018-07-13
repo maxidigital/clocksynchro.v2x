@@ -53,7 +53,7 @@ public class Heartbeat extends Thread implements Module, MessagesListener
             message.setSystemStartTime(Global.getInstance().getSystemStartTime());
             message.setDeltaTime(ClockSource.getInstance().getDeltaTime());
         
-            DLRLogger.info(this, "Sending " + message);
+            DLRLogger.fine(this, "Sending " + message);
             linkbird.send(message.getBytes());
             
             try {
@@ -82,7 +82,7 @@ public class Heartbeat extends Thread implements Module, MessagesListener
         if(rs == null)
         {
             String inco = ColorString.string("Incoming ", Color.GREEN, Effect.BOLD);
-            DLRLogger.info(this, inco + message);
+            DLRLogger.fine(this, inco + message);
             
             RemoteStation nrs = new RemoteStation();
             nrs.stationId = message.getStationId();
@@ -104,7 +104,7 @@ public class Heartbeat extends Thread implements Module, MessagesListener
                 if(message.getHopsToReach() < rs.hopsToReach)
                 {
                     String inco = ColorString.string("Incoming ", Color.GREEN, Effect.BOLD);
-                    DLRLogger.info(this, inco + message);
+                    DLRLogger.fine(this, inco + message);
                     
                     rs.hopsToReach = message.getHopsToReach();
                     rs.messageArrivalTime = System.currentTimeMillis();
@@ -114,7 +114,7 @@ public class Heartbeat extends Thread implements Module, MessagesListener
             else //we haven't already received this message
             {
                 String inco = ColorString.string("Incoming ", Color.GREEN, Effect.BOLD);
-                DLRLogger.info(this, inco + message);
+                DLRLogger.fine(this, inco + message);
                 
                 rs.lastMessageId = message.getMessageId();
                 rs.systemStartTime = message.getSystemStartTime();
