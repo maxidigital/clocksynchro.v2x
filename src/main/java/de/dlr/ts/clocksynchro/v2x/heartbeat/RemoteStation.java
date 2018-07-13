@@ -7,6 +7,7 @@ package de.dlr.ts.clocksynchro.v2x.heartbeat;
 
 import de.dlr.ts.clocksynchro.v2x.Config;
 import de.dlr.ts.clocksynchro.v2x.Global;
+import de.dlr.ts.commons.tools.NiceTimeTool;
 import de.dlr.ts.commons.tools.StringTools;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,14 @@ class RemoteStation
     
     long messageArrivalTime;
     //int messagesCount;
+
+    private NiceTimeTool ntt = new NiceTimeTool();
     
+    public RemoteStation() {
+        ntt.setSecond("seconds");
+        ntt.setMinute("min");
+        ntt.setHour("hours");
+    }
     
     /**
      * 
@@ -55,7 +63,7 @@ class RemoteStation
     }
     
     private static int[]    sizes = {17, 7, 8, 4, 8, 17};
-    private static String[] align = {"R", "R", "R", "R", "R", "RS"};
+    private static String[] align = {"R", "R", "R", "R", "R", "R    "};
     
     public boolean getState()
     {
@@ -65,6 +73,8 @@ class RemoteStation
         return true;
     }
     
+    
+    
     /**
      * 
      * @return 
@@ -73,12 +83,15 @@ class RemoteStation
     {
         StringBuilder sb = new StringBuilder();
         
-        sb.append("| ");
+        sb.append("| ");        
+        
+        long diff = System.currentTimeMillis() - messageArrivalTime;
+        String time = ntt.getTime(diff);
         
         if(this.stationId == Config.getInstance().getMyStationId())
             sb.append(StringUtils.repeat(" ", sizes[0]));
         else
-            sb.append(Global.getInstance().getDateTime().format(new Date(messageArrivalTime)));        
+            sb.append(StringTools.align(time + " ago", sizes[0], align[0]));
                         
         sb.append(" | ");
         sb.append(StringTools.align(stationId, sizes[1], align[1]));
