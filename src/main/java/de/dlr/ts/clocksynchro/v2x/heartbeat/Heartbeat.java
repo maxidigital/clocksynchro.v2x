@@ -12,6 +12,9 @@ import java.util.HashMap;
 import de.dlr.ts.clocksynchro.v2x.MessagesListener;
 import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
 import de.dlr.ts.commons.logger.DLRLogger;
+import de.dlr.ts.commons.utils.print.Color;
+import de.dlr.ts.commons.utils.print.ColorString;
+import de.dlr.ts.commons.utils.print.Effect;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,11 +27,20 @@ public class Heartbeat extends Thread implements Module, MessagesListener
     private static final Heartbeat INSTANCE = new Heartbeat();
     private final HashMap<Integer, RemoteStation> remoteStations = new HashMap<>();
     private final LinkbirdHearbeat linkbird = new LinkbirdHearbeat(this);
+    private final Printer printer = new Printer();
+    
+    HashMap<Integer, RemoteStation> getRemoteStations() {
+        return remoteStations;
+    }        
     
     @Override
     public void run()
     {
-        DLRLogger.config(this, "Starting the heartbeat module");
+        linkbird.init();
+        
+        printer.start();
+        
+        DLRLogger.config(this, "Starting heartbeat module");
         
         while(true)
         {
@@ -41,7 +53,7 @@ public class Heartbeat extends Thread implements Module, MessagesListener
             message.setSystemStartTime(Global.getInstance().getSystemStartTime());
             message.setDeltaTime(ClockSource.getInstance().getDeltaTime());
         
-            DLRLogger.info(this, "Sending heartbeat message: " + message);
+            DLRLogger.info(this, "Sending " + message);
             linkbird.send(message.getBytes());
             
             try {
@@ -58,17 +70,20 @@ public class Heartbeat extends Thread implements Module, MessagesListener
      */
     @Override
     public void receivePayload(byte[] payload)
-    {
+    {                
         HeartbeatMessage message = new HeartbeatMessage();
         message.parse(payload);
-        
+                        
         if(message.getStationId() == Config.getInstance().getMyStationId())
-            return;
+            return;                                
         
         RemoteStation rs = remoteStations.get(message.getStationId());
             
         if(rs == null)
         {
+            String inco = ColorString.string("Incoming ", Color.GREEN, Effect.BOLD);
+            DLRLogger.info(this, inco + message);
+            
             RemoteStation nrs = new RemoteStation();
             nrs.stationId = message.getStationId();
             nrs.lastMessageId = message.getMessageId();
@@ -76,6 +91,7 @@ public class Heartbeat extends Thread implements Module, MessagesListener
             nrs.messageTimeInMillis = message.getCurrentTime();
             nrs.deltaTimeInMillis = message.getDeltaTime();
             nrs.hopsToReach = message.getHopsToReach();
+            nrs.messageArrivalTime = System.currentTimeMillis();
             
             remoteStations.put(message.getStationId(), nrs);
             
@@ -87,17 +103,25 @@ public class Heartbeat extends Thread implements Module, MessagesListener
             {
                 if(message.getHopsToReach() < rs.hopsToReach)
                 {
+                    String inco = ColorString.string("Incoming ", Color.GREEN, Effect.BOLD);
+                    DLRLogger.info(this, inco + message);
+                    
                     rs.hopsToReach = message.getHopsToReach();
+                    rs.messageArrivalTime = System.currentTimeMillis();
                     forwardMessage(message);
                 }
             }
             else //we haven't already received this message
             {
+                String inco = ColorString.string("Incoming ", Color.GREEN, Effect.BOLD);
+                DLRLogger.info(this, inco + message);
+                
                 rs.lastMessageId = message.getMessageId();
                 rs.systemStartTime = message.getSystemStartTime();
                 rs.messageTimeInMillis = message.getCurrentTime();
                 rs.deltaTimeInMillis = message.getDeltaTime();
                 rs.hopsToReach = message.getHopsToReach();
+                rs.messageArrivalTime = System.currentTimeMillis();
                 
                 forwardMessage(message);
             }
@@ -113,7 +137,11 @@ public class Heartbeat extends Thread implements Module, MessagesListener
         mess.decreaseHop();
         
         if(mess.getHops() > 0)
+        {
+            DLRLogger.fine(this, "Forwarding heartbeat message " + mess.getName());
             linkbird.send(mess.getBytes());
+        }
+            
     }
     
     /**

@@ -84,10 +84,10 @@ public class V2XTimeMessage implements UDPMessageInterface
     @Override
     public byte[] getBytes()
     {
-        ByteBuffer bb = ByteBuffer.allocate(128);
-        bb.put(hops);
-        bb.putInt(messageId);
-        bb.putLong(currentTime);
+        ByteBuffer bb = ByteBuffer.allocate(13);
+        bb.put(hops);               //1
+        bb.putInt(messageId);       //4
+        bb.putLong(currentTime);    //8
         
         return bb.array();
     }
@@ -103,6 +103,5 @@ public class V2XTimeMessage implements UDPMessageInterface
                 messageId + ", currentTime=" + currentTime;
         
     }
-    
     
 }

@@ -33,7 +33,7 @@ class LinkbirdHearbeat implements CCU.Listener
         if(ccum.getDestinationPort() != Config.getInstance().getHeartbeatBTPPort())
             return;
         
-        listener.receivePayload(ccum.getBytes());
+        listener.receivePayload(ccum.getPayload());
     }
     
     public void send(byte[] payload) {

@@ -25,6 +25,12 @@ class HeartbeatMessage implements UDPMessageInterface
     private long systemStartTime;
     private int deltaTime;
     
+    
+    public String getName()
+    {
+        return stationId + ":" + messageId;
+    }
+    
     public int getStationId() {
         return stationId;
     }
@@ -35,6 +41,10 @@ class HeartbeatMessage implements UDPMessageInterface
 
     public static int getMessageIdCounter() {
         return messageIdCounter++;
+    }
+    
+    public static int getCurrentMessageId() {
+        return messageIdCounter;
     }
     
     public int getDeltaTime() {
@@ -109,14 +119,14 @@ class HeartbeatMessage implements UDPMessageInterface
 
     @Override
     public byte[] getBytes() {
-        ByteBuffer bb = ByteBuffer.allocate(256);
-        bb.putInt(messageId);
-        bb.putInt(stationId);
-        bb.putInt(startingHopValue);
-        bb.putInt(hops);
-        bb.putInt(deltaTime);
-        bb.putLong(currentTime);
-        bb.putLong(systemStartTime);
+        ByteBuffer bb = ByteBuffer.allocate(36);
+        bb.putInt(messageId);           //4
+        bb.putInt(stationId);           //4
+        bb.put(startingHopValue);    //4
+        bb.put(hops);                   //4
+        bb.putInt(deltaTime);           //4
+        bb.putLong(currentTime);        //8
+        bb.putLong(systemStartTime);    //8
         
         return bb.array();
     }
@@ -133,8 +143,8 @@ class HeartbeatMessage implements UDPMessageInterface
     public String toString() {
         
         StringBuilder sb = new StringBuilder("HeatbeatMessage ");
-        sb.append("messageId=").append(messageId).append(", ");
         sb.append("stationId=").append(stationId).append(", ");
+        sb.append("messageId=").append(messageId).append(", ");        
         sb.append("startingHop=").append(startingHopValue).append(", ");
         sb.append("hops=").append(hops).append(", ");
         sb.append("currentTime=").append(Global.getInstance().getOnlyTime(currentTime)).append(", ");

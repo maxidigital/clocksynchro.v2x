@@ -16,7 +16,7 @@ class GPSSource implements UDPServer.Listener, ClockSourceInterface
 {
     private int deltaTime = 0;
     private UDPServer udpServer;
-    private boolean enabled = false;
+    private boolean enabled = true;
     
     
     /**
@@ -31,7 +31,7 @@ class GPSSource implements UDPServer.Listener, ClockSourceInterface
         //mess.parse(payload);
         
         //TODO set delta time
-        deltaTime = 13000;
+        deltaTime = 0;
         
         enabled = true;
     }

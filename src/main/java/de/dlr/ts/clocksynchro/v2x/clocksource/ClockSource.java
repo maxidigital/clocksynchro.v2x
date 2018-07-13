@@ -3,7 +3,7 @@ package de.dlr.ts.clocksynchro.v2x.clocksource;
 import de.dlr.ts.clocksynchro.v2x.Config;
 import de.dlr.ts.clocksynchro.v2x.Global;
 import de.dlr.ts.clocksynchro.v2x.Module;
-import java.text.SimpleDateFormat;
+import de.dlr.ts.commons.logger.DLRLogger;
 import java.util.Date;
 
 /**
@@ -31,11 +31,15 @@ public class ClockSource implements Module
     {
         if(Config.getInstance().getStationType() == Config.StationType.GENERATOR)
         {
+            DLRLogger.config(this, "Starting GPS clock source");
+            
             csi = new GPSSource();
             csi.start();
         }
         else
         {
+            DLRLogger.config(this, "Starting V2X clock source");
+            
             csi = new V2XSource();
             csi.start();
         }

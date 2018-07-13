@@ -9,6 +9,7 @@ import de.dlr.ts.c2x.devices.linkbird.LinkbirdFactory;
 import de.dlr.ts.commons.c2x.interfaces.ccu.CCU;
 import de.dlr.ts.commons.c2x.interfaces.ccu.CCUMessage;
 import de.dlr.ts.commons.c2x.interfaces.ccu.DisseminationType;
+import de.dlr.ts.commons.logger.DLRLogger;
 
 /**
  *
@@ -20,6 +21,8 @@ public class MainLinkbird {
     
     public void start()
     {
+        DLRLogger.config(this, "Starting main linkbird");
+                
         ccu = LinkbirdFactory.createCCU();
         ccu.setCCUAddress(Config.getInstance().getLinkbirdOutgoingAddress());
         ccu.setDataInputPort(Config.getInstance().getLinkbirdIncomingPort());

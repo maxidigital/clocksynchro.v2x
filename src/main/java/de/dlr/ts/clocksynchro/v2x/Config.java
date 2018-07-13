@@ -40,7 +40,7 @@ public class Config
     private final int heartbeatBTPPort = 3334;
     
     private final int startingHopValue = 10;
-    private final long heartbeatSendingInterval = 30000;
+    private final long heartbeatSendingInterval = 10000;
     private final long timeBroadcastingSendingInterval = 10000;
     private final long timeAPISendingInterval = 10000;
     
@@ -49,6 +49,8 @@ public class Config
      */
     public void load()
     {
+        DLRLogger.config(this, "Loading configuration file config.xml");
+        
         try {
             XMLAdmin2 x = new XMLAdmin2().load("config.xml");
             

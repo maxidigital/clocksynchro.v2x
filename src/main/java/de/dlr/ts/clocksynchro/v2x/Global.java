@@ -5,6 +5,7 @@
  */
 package de.dlr.ts.clocksynchro.v2x;
 
+import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,8 +18,19 @@ public class Global {
     
     //private long deltaTime;
     private final long systemStartTime = System.currentTimeMillis();
-    private final SimpleDateFormat onlyTime = new SimpleDateFormat("HH:mm:ss.SSS");
+    private final SimpleDateFormat onlyTime = new SimpleDateFormat("HH:mm:ss");
+    private final SimpleDateFormat onlyTimeWithMillis = new SimpleDateFormat("HH:mm:ss.SSS");
+    
+    private final SimpleDateFormat dateTime = new SimpleDateFormat("dd.MM.YY HH:mm:ss");
 
+    public SimpleDateFormat getOnlyTimeWithMillis() {
+        return onlyTimeWithMillis;
+    }
+
+    public SimpleDateFormat getDateTime() {
+        return dateTime;
+    }
+       
     public SimpleDateFormat getOnlyTime() {
         return onlyTime;
     }
@@ -28,11 +40,15 @@ public class Global {
     }
     
     public long getSystemStartTime() {
-        return systemStartTime;
+        return systemStartTime + ClockSource.getInstance().getDeltaTime();
     }
     
     public static Global getInstance() {
         return INSTANCE;
     }
     
+    public static String dateInWords(long time)
+    {
+        return "";
+    }
 }

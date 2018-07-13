@@ -21,9 +21,12 @@ public class Main
     
     public void start() throws SocketException, IOException {        
         
-        DLRLogger.config(this, "Starting Clock Synchro");
+        DLRLogger.config(this, "-----------------------------------------------");
+        DLRLogger.config(this, "-----      Starting Clock Synchro");
+        DLRLogger.config(this, "-----------------------------------------------");
         
         Config.getInstance().load();
+        MainLinkbird.getInstance().start();
         ClockSource.getInstance().start();
         Heartbeat.getInstance().start();
         TimeAPISender.getInstance().start();

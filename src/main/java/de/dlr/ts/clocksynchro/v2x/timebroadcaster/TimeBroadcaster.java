@@ -4,6 +4,7 @@ package de.dlr.ts.clocksynchro.v2x.timebroadcaster;
 import de.dlr.ts.clocksynchro.v2x.Config;
 import de.dlr.ts.clocksynchro.v2x.Module;
 import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
+import de.dlr.ts.commons.logger.DLRLogger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,12 +36,14 @@ public class TimeBroadcaster extends Thread implements Module
             } catch (InterruptedException ex) {
                 Logger.getLogger(TimeBroadcaster.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-            
+                        
             V2XTimeMessage message = new V2XTimeMessage();
             message.setMessageId(V2XTimeMessage.getMessageIdCounter());
             message.setCurrentTime(ClockSource.getInstance().getCurrentTime());
             message.setHops((byte) Config.getInstance().getStartingHopValue());
+            
+            DLRLogger.info(this, "Sending V2X time message: " + message);
+            
             linkbird.send(message.getBytes());
         }
     }

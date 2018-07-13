@@ -35,6 +35,9 @@ public class TimeAPISender extends Thread implements Module
     */
     @Override
     public void run() {
+        
+        DLRLogger.config(this, "Starting Time API sender");
+        
         while(true)
         {
             DLRLogger.fine(this, "Sending Time messsage to " + 
