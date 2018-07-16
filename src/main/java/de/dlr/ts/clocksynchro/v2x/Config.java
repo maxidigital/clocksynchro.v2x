@@ -13,6 +13,7 @@ import de.dlr.ts.utils.xmladmin2.exceptions.XMLNodeNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lombok.Getter;
 import org.xml.sax.SAXException;
 
 /**
@@ -38,11 +39,14 @@ public class Config
     
     private final int timeMessageBTPPort = 3333;
     private final int heartbeatBTPPort = 3334;
+    @Getter private final int measurementBTPPort = 3335;
     
     private final int startingHopValue = 10;
     private final long heartbeatSendingInterval = 10000;
     private final long timeBroadcastingSendingInterval = 10000;
     private final long timeAPISendingInterval = 10000;
+    
+    @Getter final private int measurementTripsCount = 50;
     
     /**
      * 

@@ -15,6 +15,8 @@ import de.dlr.ts.commons.logger.DLRLogger;
 import de.dlr.ts.commons.utils.print.Color;
 import de.dlr.ts.commons.utils.print.ColorString;
 import de.dlr.ts.commons.utils.print.Effect;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +34,21 @@ public class Heartbeat extends Thread implements Module, MessagesListener
     HashMap<Integer, RemoteStation> getRemoteStations() {
         return remoteStations;
     }        
+    
+    /**
+     * 
+     * @return 
+     */
+    public RemoteStation[] getHopZeroStations()
+    {
+        List<RemoteStation> rm = new ArrayList<>();
+        
+        for (Integer i : remoteStations.keySet())        
+            if(remoteStations.get(i).getHopsToReach() == 0)
+                rm.add(remoteStations.get(i));        
+        
+        return rm.toArray(new RemoteStation[rm.size()]);
+    }
     
     @Override
     public void run()
@@ -85,13 +102,13 @@ public class Heartbeat extends Thread implements Module, MessagesListener
             DLRLogger.fine(this, inco + message);
             
             RemoteStation nrs = new RemoteStation();
-            nrs.stationId = message.getStationId();
-            nrs.lastMessageId = message.getMessageId();
-            nrs.systemStartTime = message.getSystemStartTime();
-            nrs.messageTimeInMillis = message.getCurrentTime();
-            nrs.deltaTimeInMillis = message.getDeltaTime();
-            nrs.hopsToReach = message.getHopsToReach();
-            nrs.messageArrivalTime = System.currentTimeMillis();
+            nrs.setStationId(message.getStationId());
+            nrs.setLastMessageId(message.getMessageId());
+            nrs.setSystemStartTime(message.getSystemStartTime());
+            nrs.setMessageTimeInMillis(message.getCurrentTime());
+            nrs.setDeltaTimeInMillis(message.getDeltaTime());
+            nrs.setHopsToReach(message.getHopsToReach());
+            nrs.setMessageArrivalTime(System.currentTimeMillis());
             
             remoteStations.put(message.getStationId(), nrs);
             
@@ -99,15 +116,15 @@ public class Heartbeat extends Thread implements Module, MessagesListener
         }
         else //We already have this station
         {
-            if(message.getMessageId() == rs.lastMessageId) //we already have received this message
+            if(message.getMessageId() == rs.getLastMessageId()) //we already have received this message
             {
-                if(message.getHopsToReach() < rs.hopsToReach)
+                if(message.getHopsToReach() < rs.getHopsToReach())
                 {
                     String inco = ColorString.string("Incoming ", Color.GREEN, Effect.BOLD);
                     DLRLogger.fine(this, inco + message);
                     
-                    rs.hopsToReach = message.getHopsToReach();
-                    rs.messageArrivalTime = System.currentTimeMillis();
+                    rs.setHopsToReach(message.getHopsToReach());
+                    rs.setMessageArrivalTime(System.currentTimeMillis());
                     forwardMessage(message);
                 }
             }
@@ -116,12 +133,12 @@ public class Heartbeat extends Thread implements Module, MessagesListener
                 String inco = ColorString.string("Incoming ", Color.GREEN, Effect.BOLD);
                 DLRLogger.fine(this, inco + message);
                 
-                rs.lastMessageId = message.getMessageId();
-                rs.systemStartTime = message.getSystemStartTime();
-                rs.messageTimeInMillis = message.getCurrentTime();
-                rs.deltaTimeInMillis = message.getDeltaTime();
-                rs.hopsToReach = message.getHopsToReach();
-                rs.messageArrivalTime = System.currentTimeMillis();
+                rs.setLastMessageId(message.getMessageId());
+                rs.setSystemStartTime(message.getSystemStartTime());
+                rs.setMessageTimeInMillis(message.getCurrentTime());
+                rs.setDeltaTimeInMillis(message.getDeltaTime());
+                rs.setHopsToReach(message.getHopsToReach());
+                rs.setMessageArrivalTime(System.currentTimeMillis());
                 
                 forwardMessage(message);
             }

@@ -1,12 +1,12 @@
 package de.dlr.ts.clocksynchro.v2x.clocksource;
 
-import de.dlr.ts.clocksynchro.v2x.UDPMessageInterface;
+import de.dlr.ts.clocksynchro.v2x.V2XMessageInterface;
 
 /**
  *  Process GPS time messages
- *  @see UDPMessageInterface    
+ *  @see V2XMessageInterface    
  */
-public class GPSMessage implements UDPMessageInterface
+public class GPSMessage implements V2XMessageInterface
 {
    /**
     *  parses byte array message 

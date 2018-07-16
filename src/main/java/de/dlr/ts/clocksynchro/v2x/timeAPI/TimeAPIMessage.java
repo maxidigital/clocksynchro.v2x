@@ -2,13 +2,13 @@ package de.dlr.ts.clocksynchro.v2x.timeAPI;
 
 import de.dlr.ts.commons.tools.BytesTools;
 import java.nio.ByteBuffer;
-import de.dlr.ts.clocksynchro.v2x.UDPMessageInterface;
+import de.dlr.ts.clocksynchro.v2x.V2XMessageInterface;
 
 /**
  * Process meeages from UDP server (GPS Source)
- * @see UDPMessageInterface
+ * @see V2XMessageInterface
  */
-public class TimeAPIMessage implements UDPMessageInterface
+public class TimeAPIMessage implements V2XMessageInterface
 {
     private long currentTime;
     

@@ -44,12 +44,12 @@ public class Printer extends Thread
     
     private RemoteStation fillUpMyData()
     {
-        rs.deltaTimeInMillis = ClockSource.getInstance().getDeltaTime();
-        rs.hopsToReach = 0;
-        rs.stationId = Config.getInstance().getMyStationId();
-        rs.systemStartTime = Global.getInstance().getSystemStartTime();
-        rs.lastMessageId = HeartbeatMessage.getCurrentMessageId();
-        rs.messageArrivalTime = System.currentTimeMillis();
+        rs.setDeltaTimeInMillis(ClockSource.getInstance().getDeltaTime());
+        rs.setHopsToReach(0);
+        rs.setStationId(Config.getInstance().getMyStationId());
+        rs.setSystemStartTime(Global.getInstance().getSystemStartTime());
+        rs.setLastMessageId(HeartbeatMessage.getCurrentMessageId());
+        rs.setMessageArrivalTime(System.currentTimeMillis());
         
         return rs;
     }

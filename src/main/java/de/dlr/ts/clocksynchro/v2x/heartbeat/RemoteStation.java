@@ -10,28 +10,38 @@ import de.dlr.ts.clocksynchro.v2x.Global;
 import de.dlr.ts.commons.tools.NiceTimeTool;
 import de.dlr.ts.commons.tools.StringTools;
 import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author Praktikant-Q2-2015
  */
-class RemoteStation
+public class RemoteStation
 {
-    int stationId;
-    int lastMessageId;
-    long systemStartTime;
+    @Getter @Setter private int stationId;
     
-    int hopsToReach;
+    @Getter @Setter private int lastMessageId;
+    @Getter @Setter private long systemStartTime;
     
-    long messageTimeInMillis;
-    int deltaTimeInMillis;
+    @Getter @Setter private int hopsToReach;
     
-    long messageArrivalTime;
-    //int messagesCount;
-
+    @Getter @Setter private long messageTimeInMillis;
+    @Getter @Setter private int deltaTimeInMillis;
+    
+    @Getter @Setter private long messageArrivalTime;
+    
+    @Getter @Setter private long lastLatencyMeasurementTime;
+    @Getter @Setter private int latencyMessagesCount;
+    @Getter @Setter private long lastLatencyMeasurementValue;
+        
     private NiceTimeTool ntt = new NiceTimeTool();
     
+    
+    /**
+     * 
+     */
     public RemoteStation() {
         ntt.setSecond("seconds");
         ntt.setMinute("min");

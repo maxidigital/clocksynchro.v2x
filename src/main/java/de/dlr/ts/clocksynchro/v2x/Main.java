@@ -2,6 +2,7 @@ package de.dlr.ts.clocksynchro.v2x;
 
 import de.dlr.ts.clocksynchro.v2x.clocksource.ClockSource;
 import de.dlr.ts.clocksynchro.v2x.heartbeat.Heartbeat;
+import de.dlr.ts.clocksynchro.v2x.latency.Latency;
 import de.dlr.ts.clocksynchro.v2x.timeAPI.TimeAPISender;
 import de.dlr.ts.clocksynchro.v2x.timebroadcaster.TimeBroadcaster;
 import de.dlr.ts.commons.logger.DLRLogger;
@@ -30,7 +31,8 @@ public class Main
         MainLinkbird.getInstance().start();
         ClockSource.getInstance().start();
         Heartbeat.getInstance().start();
-        TimeAPISender.getInstance().start();
+        TimeAPISender.getInstance().start();                
+        Latency.getInstance().start();
         
         if(Config.getInstance().getStationType() == Config.StationType.GENERATOR)
             TimeBroadcaster.getInstance().start();

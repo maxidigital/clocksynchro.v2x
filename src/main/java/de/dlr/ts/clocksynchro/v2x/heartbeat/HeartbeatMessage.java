@@ -6,14 +6,14 @@
 package de.dlr.ts.clocksynchro.v2x.heartbeat;
 
 import de.dlr.ts.clocksynchro.v2x.Global;
-import de.dlr.ts.clocksynchro.v2x.UDPMessageInterface;
 import java.nio.ByteBuffer;
+import de.dlr.ts.clocksynchro.v2x.V2XMessageInterface;
 
 /**
  *
  * @author Praktikant-Q2-2015
  */
-class HeartbeatMessage implements UDPMessageInterface
+class HeartbeatMessage implements V2XMessageInterface
 {
     private static int messageIdCounter = 0;
     
@@ -40,6 +40,11 @@ class HeartbeatMessage implements UDPMessageInterface
     }
 
     public static int getMessageIdCounter() {
+        int id = messageIdCounter++;                
+        
+        if(id > 10_000_000)
+            messageIdCounter = 0;
+        
         return messageIdCounter++;
     }
     

@@ -2,13 +2,13 @@
 package de.dlr.ts.clocksynchro.v2x.timebroadcaster;
 
 import java.nio.ByteBuffer;
-import de.dlr.ts.clocksynchro.v2x.UDPMessageInterface;
+import de.dlr.ts.clocksynchro.v2x.V2XMessageInterface;
 
 /**
  * Process meeages from linkbird
- * @see UDPMessageInterface
+ * @see V2XMessageInterface
  */
-public class V2XTimeMessage implements UDPMessageInterface
+public class V2XTimeMessage implements V2XMessageInterface
 {   
     private static int messageIdCounter = 0;
     private int messageId;
