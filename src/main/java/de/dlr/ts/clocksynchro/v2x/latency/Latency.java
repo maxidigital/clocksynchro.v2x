@@ -29,7 +29,7 @@ public class Latency extends Thread implements MessagesListener
         linkbird = new LatencyLinkbird(this);        
         linkbird.init();
         
-        meas = new Measurements(linkbird);        
+        meas = new Measurements(linkbird, true);        
         
         DLRLogger.info(this, "Starting latency measurement module");
         
@@ -63,8 +63,7 @@ public class Latency extends Thread implements MessagesListener
             
         if(current != null && current.isActive() && 
                 lm.getOriginStationId() == Config.getInstance().getMyStationId())
-        {
-            //System.out.println("----------- 1 ");
+        {            
             current.incomingMessage(payload);
         }            
         else

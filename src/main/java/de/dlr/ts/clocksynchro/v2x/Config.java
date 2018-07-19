@@ -46,7 +46,12 @@ public class Config
     private final long timeBroadcastingSendingInterval = 10000;
     private final long timeAPISendingInterval = 10000;
     
-    @Getter final private int measurementTripsCount = 50;
+    private final int measurementTotalTrips = 50;
+
+    
+    public int getMeasurementTotalTrips() {
+        return measurementTotalTrips;
+    }        
     
     /**
      * 

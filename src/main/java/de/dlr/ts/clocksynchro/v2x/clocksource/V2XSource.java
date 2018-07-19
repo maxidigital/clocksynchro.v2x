@@ -4,8 +4,6 @@ import de.dlr.ts.clocksynchro.v2x.MessagesListener;
 import de.dlr.ts.clocksynchro.v2x.timebroadcaster.V2XTimeMessage;
 import de.dlr.ts.commons.c2x.interfaces.ccu.CCU;
 import de.dlr.ts.commons.logger.DLRLogger;
-import de.dlr.ts.commons.utils.print.Color;
-import de.dlr.ts.commons.utils.print.ColorString;
 
 /**
  * Receives time message from Linkbird source 
@@ -44,7 +42,7 @@ class V2XSource implements MessagesListener, ClockSourceInterface
     private void processMessage(V2XTimeMessage mess) {
         deltaTime = (int) (System.currentTimeMillis() - mess.getCurrentTime());
         
-        DLRLogger.info(this, "Saving delta time: " + deltaTime);
+        DLRLogger.fine(this, "Saving delta time: " + deltaTime);
     }
 
     @Override
@@ -56,13 +54,12 @@ class V2XSource implements MessagesListener, ClockSourceInterface
         if(mess.getMessageId() == lastMessageReceivedId)
             return;
         
-        String string = ColorString.string("V2X Time message", Color.CYAN);
-        DLRLogger.info(this, "Incoming " + string + ". "+ mess.toString());
+        //String string = ColorString.string("V2X Time message", Color.CYAN);
+        DLRLogger.fine(this, "Incoming " + mess.toString());
         
         lastMessageReceivedId = mess.getMessageId();
         
-        if(mess.getHops() > 0)
-        {
+        if(mess.getHops() > 0) {
             mess.decreaseHop();
             linkbird.send(mess.getBytes());
         }

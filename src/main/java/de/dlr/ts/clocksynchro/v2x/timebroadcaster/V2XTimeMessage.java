@@ -1,6 +1,7 @@
 
 package de.dlr.ts.clocksynchro.v2x.timebroadcaster;
 
+import de.dlr.ts.clocksynchro.v2x.Global;
 import java.nio.ByteBuffer;
 import de.dlr.ts.clocksynchro.v2x.V2XMessageInterface;
 
@@ -100,8 +101,7 @@ public class V2XTimeMessage implements V2XMessageInterface
     public String toString() {
         
         return "V2XTimeMessage  hops=" + hops + ", messageId=" + 
-                messageId + ", currentTime=" + currentTime;
-        
+                messageId + ", currentTime=" + Global.getInstance().formatOnlyTimeWithMillis(currentTime);
     }
     
 }

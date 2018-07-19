@@ -6,10 +6,8 @@
 package de.dlr.ts.clocksynchro.v2x.heartbeat;
 
 import de.dlr.ts.clocksynchro.v2x.Config;
-import de.dlr.ts.clocksynchro.v2x.Global;
 import de.dlr.ts.commons.tools.NiceTimeTool;
 import de.dlr.ts.commons.tools.StringTools;
-import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -36,16 +34,19 @@ public class RemoteStation
     @Getter @Setter private int latencyMessagesCount;
     @Getter @Setter private long lastLatencyMeasurementValue;
         
-    private NiceTimeTool ntt = new NiceTimeTool();
+    private final NiceTimeTool ntt = new NiceTimeTool();
+    
+    private static final int[]    sizes = {17, 7, 8, 4, 8, 17};
+    private static final String[] align = {"R", "R", "R", "R", "R", "R"};
     
     
     /**
      * 
      */
     public RemoteStation() {
-        ntt.setSecond("seconds");
+        ntt.setSecond("secs");
         ntt.setMinute("min");
-        ntt.setHour("hours");
+        ntt.setHour("h");
     }
     
     /**
@@ -71,19 +72,17 @@ public class RemoteStation
                       
         return sb.toString();
     }
-    
-    private static int[]    sizes = {17, 7, 8, 4, 8, 17};
-    private static String[] align = {"R", "R", "R", "R", "R", "R    "};
-    
-    public boolean getState()
-    {
+
+    /**
+     * 
+     * @return 
+     */
+    public boolean getState() {
         if(System.currentTimeMillis() - messageArrivalTime > 120_000)
             return false;
         
         return true;
     }
-    
-    
     
     /**
      * 
@@ -116,8 +115,11 @@ public class RemoteStation
         sb.append(StringTools.align(deltaTimeInMillis, sizes[4], align[4]));
         
         sb.append(" | ");
-        String star = Global.getInstance().getDateTime().format(new Date(systemStartTime));
-        sb.append(StringTools.align(star, sizes[5], align[5]));
+        diff = System.currentTimeMillis() - systemStartTime;
+        time = ntt.getTime(diff);
+        //String star = Global.getInstance().getDateTime().format(new Date(systemStartTime));
+        //sb.append(StringTools.align(star, sizes[5], align[5]));
+        sb.append(StringTools.align(time + " ago", sizes[5], align[5]));
         
         sb.append(" |");        
         
